@@ -24,6 +24,9 @@ public class EntityLockerImpl<T> implements EntityLocker<T> {
 
     @Override
     public boolean lock(T id, long timeout, TimeUnit timeUnit) throws InterruptedException {
+        if (timeUnit == null) {
+            throw new IllegalArgumentException("TimeUnit cannot be null");
+        }
         return lockInternalInterruptibly(id, timeout, timeUnit);
     }
 
@@ -55,6 +58,10 @@ public class EntityLockerImpl<T> implements EntityLocker<T> {
     }
 
     private void lockInternal(T id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Entity id cannot be null");
+        }
+
         long threadId = Thread.currentThread().getId();
         Sync sync = new Sync(threadId);
 
@@ -76,6 +83,10 @@ public class EntityLockerImpl<T> implements EntityLocker<T> {
     }
 
     private boolean lockInternalInterruptibly(T id, Long timeout, TimeUnit timeUnit) throws InterruptedException {
+        if (id == null) {
+            throw new IllegalArgumentException("Entity id cannot be null");
+        }
+
         long threadId = Thread.currentThread().getId();
         Sync sync = new Sync(threadId);
 

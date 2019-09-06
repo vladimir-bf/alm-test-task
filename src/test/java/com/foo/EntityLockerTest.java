@@ -44,6 +44,29 @@ public class EntityLockerTest {
     }
 
     @Test
+    public void it_must_not_allow_null_arguments() throws InterruptedException {
+        EntityLocker<Integer> locker = new EntityLockerImpl<>();
+
+        try {
+            locker.lock(null);
+            fail();
+        } catch (IllegalArgumentException e) {
+        }
+
+        try {
+            locker.lock(null, 1, TimeUnit.SECONDS);
+            fail();
+        } catch (IllegalArgumentException e) {
+        }
+
+        try {
+            locker.lock(1, 1, null);
+            fail();
+        } catch (IllegalArgumentException e) {
+        }
+    }
+
+    @Test
     public void it_must_provide_reentrancy() throws InterruptedException, ExecutionException, TimeoutException {
         ExecutorService executorService = Executors.newFixedThreadPool(1);
         EntityLocker<Integer> locker = new EntityLockerImpl<>();
